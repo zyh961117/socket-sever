@@ -1,16 +1,15 @@
-var express = require('express'); 
-var app = express();
+const ws = require("nodejs-websocket")
 
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+const wsServer = ws.createServer((conn) => {
+    console.log(conn.key + '  加入连接')
+    conn.on("close", (code, reason) => {
+        console.log(conn.key + '  断开连接')
+    })
+	conn.on('connect',res=>{
+        console.log('连接成功')
+	})
+    conn.on('error', (err) => {
+        console.log(err)
+    })
 
-rooms = new Array();
-
-app.use('/', express.static(__dirname + '/public')); 
-
-server.listen(3000);
-
-//socket部分
-io.on('connection', function(socket) {
-    console.log(socket.id + '加入连接');
-});
+}).listen(3000)
